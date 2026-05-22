@@ -1,0 +1,135 @@
+.shop-page {
+  background: var(--ivory);
+  min-height: 60vh;
+}
+
+.shop-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 3rem;
+  padding: 3rem 0 5rem;
+  align-items: start;
+}
+
+.shop-sidebar {
+  position: sticky;
+  top: 90px;
+}
+
+.sidebar-block {
+  margin-bottom: 2.5rem;
+}
+
+.sidebar-block h3 {
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--ivory-dark);
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--ivory-dark);
+}
+
+.search-field input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.75rem 0;
+  font-size: 0.9rem;
+  font-weight: 300;
+  outline: none;
+}
+
+.search-field input::placeholder {
+  color: var(--text-muted);
+}
+
+.category-filters {
+  list-style: none;
+}
+
+.category-filters button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border: none;
+  background: none;
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: left;
+  border-bottom: 1px solid transparent;
+  transition: color var(--ease), border-color var(--ease);
+}
+
+.category-filters button span {
+  font-size: 0.75rem;
+  color: var(--ivory-dark);
+}
+
+.category-filters button:hover {
+  color: var(--black);
+}
+
+.category-filters button.active {
+  color: var(--black);
+  font-weight: 500;
+  border-bottom-color: var(--gold);
+}
+
+.category-filters button.active span {
+  color: var(--gold);
+}
+
+.shop-toolbar p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.shop-toolbar strong {
+  color: var(--black);
+  font-weight: 500;
+}
+
+.shop-empty {
+  padding: 5rem 2rem;
+  background: var(--white);
+  text-align: center;
+}
+
+.shop-empty h3 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  margin: 1rem 0 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .shop-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .shop-sidebar {
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .shop-sidebar {
+    grid-template-columns: 1fr;
+  }
+}

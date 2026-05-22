@@ -1,0 +1,76 @@
+.admin-app {
+  display: flex;
+  min-height: 100vh;
+  background: var(--ivory);
+}
+
+.admin-sidebar {
+  width: 260px;
+  background: var(--black);
+  color: var(--text-soft);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--gold-muted);
+}
+
+.admin-brand {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+}
+
+.admin-brand strong {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.admin-brand small {
+  font-size: 0.65rem;
+  opacity: 0.5;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.admin-nav a {
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  transition: color var(--ease), background var(--ease);
+}
+
+.admin-nav a:hover,
+.admin-nav a.active {
+  color: var(--gold);
+  background: rgba(201, 169, 98, 0.08);
+}
+
+.logout-btn {
+  border-color: var(--gold-muted) !important;
+  color: var(--gold) !important;
+  margin-top: 1rem;
+  width: 100%;
+  font-size: 0.72rem !important;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 2.5rem;
+  overflow: auto;
+}
+
+@media (max-width: 768px) {
+  .admin-app { flex-direction: column; }
+  .admin-sidebar { width: 100%; }
+}

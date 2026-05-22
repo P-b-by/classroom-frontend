@@ -1,0 +1,72 @@
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  padding: 2rem;
+}
+
+.admin-login-card {
+  background: var(--black-elevated);
+  border: 1px solid var(--gold-muted);
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.admin-login-card h1 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 0.35rem;
+}
+
+.admin-login-card > p {
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+
+.admin-login-card .form-group label {
+  color: var(--gold-muted);
+}
+
+.admin-login-card .form-group input {
+  color: var(--white);
+  border-bottom-color: rgba(201, 169, 98, 0.25);
+}
+
+.login-error {
+  color: #c45c5c;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.login-hint {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  margin-top: 1.25rem;
+}
+
+.login-hint code {
+  color: var(--gold);
+}
+
+.back-link {
+  display: block;
+  margin-top: 1.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-muted);
+  transition: color var(--ease);
+}
+
+.back-link:hover {
+  color: var(--gold);
+}

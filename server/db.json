@@ -1,0 +1,173 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Classic Oxford Official",
+      "category": "Official Shoes",
+      "price": 4500,
+      "sizes": [
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44"
+      ],
+      "description": "Premium leather oxford for the modern professional.",
+      "image": "https://images.unsplash.com/photo-1614252235356-8f857d38b3f0?w=400&h=400&fit=crop"
+    },
+    {
+      "id": "2",
+      "name": "Urban Runner Sneaker",
+      "category": "Sneakers",
+      "price": 3200,
+      "sizes": [
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43"
+      ],
+      "description": "Lightweight sneaker with cushioned sole for all-day comfort.",
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop"
+    },
+    {
+      "id": "3",
+      "name": "School Smart Lace-Up",
+      "category": "School Shoes",
+      "price": 2800,
+      "sizes": [
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37"
+      ],
+      "description": "Durable black school shoes built for daily wear.",
+      "image": "https://images.unsplash.com/photo-1560769629-975ec094f050?w=400&h=400&fit=crop"
+    },
+    {
+      "id": "4",
+      "name": "Kids Play Sandal",
+      "category": "Children's Shoes",
+      "price": 1500,
+      "sizes": [
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30"
+      ],
+      "description": "Comfortable sandals for active children.",
+      "image": "https://images.unsplash.com/photo-1515347619252-60a6bf83ffd6?w=400&h=400&fit=crop"
+    },
+    {
+      "id": "5",
+      "name": "Weekend Casual Loafer",
+      "category": "Casual Shoes",
+      "price": 3500,
+      "sizes": [
+        "39",
+        "40",
+        "41",
+        "42",
+        "43"
+      ],
+      "description": "Relaxed loafer perfect for casual outings.",
+      "image": "https://images.unsplash.com/photo-1525966222134-fcfa99b8d4f5?w=400&h=400&fit=crop"
+    },
+    {
+      "id": "6",
+      "name": "Executive Brogue",
+      "category": "Men's Shoes",
+      "price": 5200,
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "description": "Hand-finished brogue with classic detailing.",
+      "image": "https://images.unsplash.com/photo-1614251180502-f9b245c3bf48?w=400&h=400&fit=crop"
+    },
+    {
+      "id": "7",
+      "name": "Summer Breeze Sandal",
+      "category": "Sandals",
+      "price": 1800,
+      "sizes": [
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43"
+      ],
+      "description": "Open-toe sandal with adjustable straps.",
+      "image": "https://images.unsplash.com/photo-1603487742031-7a131b23e2b8?w=400&h=400&fit=crop"
+    },
+    {
+      "id": "8",
+      "name": "Pro Court Sneaker",
+      "category": "Sneakers",
+      "price": 4100,
+      "sizes": [
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44"
+      ],
+      "description": "High-performance court sneaker with grip sole.",
+      "image": "https://images.unsplash.com/photo-1606107557195-0a74c8dfaf8b?w=400&h=400&fit=crop"
+    }
+  ],
+  "orders": [],
+  "blog": [
+    {
+      "id": "blog-1",
+      "slug": "how-to-choose-the-right-school-shoes",
+      "title": "How to Choose the Right School Shoes for Your Child",
+      "excerpt": "Durability, fit, and comfort matter most when selecting school footwear that lasts the full term.",
+      "content": "Finding the right school shoes is one of the most important purchases for parents each term. At Domas Ventures, we recommend focusing on three essentials: proper fit, durable construction, and all-day comfort.\n\n**Fit first** — Leave about a thumb's width between the longest toe and the shoe front. Children's feet grow quickly; check fit every few months.\n\n**Quality materials** — Look for reinforced toe caps and sturdy soles that handle daily wear on varied surfaces.\n\n**Style that lasts** — Classic black school shoes remain the standard across Kenyan institutions, and our range balances regulation compliance with modern comfort technology.\n\nVisit our collection or speak with our team for bulk school orders — we serve institutions nationwide.",
+      "image": "https://images.unsplash.com/photo-1560769629-975ec094f050?w=800&h=500&fit=crop",
+      "author": "Domas Ventures Team",
+      "category": "Guides",
+      "publishedAt": "2026-04-15T10:00:00.000Z"
+    },
+    {
+      "id": "blog-2",
+      "slug": "sneaker-trends-2026",
+      "title": "Sneaker Trends Worth Watching in 2026",
+      "excerpt": "From clean minimal silhouettes to bold accent soles — what is defining footwear fashion this year.",
+      "content": "The sneaker landscape in 2026 favours versatility: pairs that transition from casual Friday to weekend outings without a wardrobe change.\n\n**Neutral palettes** — Black, white, and earth tones dominate, making sneakers easier to pair with any outfit.\n\n**Comfort-driven design** — Cushioned midsoles and breathable uppers are no longer premium extras; they are expected at every price point.\n\n**Statement accents** — Gold detailing, contrast stitching, and sculpted soles add personality without overwhelming the look.\n\nExplore our sneaker collection for styles that match these trends at prices that respect your budget.",
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=500&fit=crop",
+      "author": "Domas Ventures Team",
+      "category": "Style",
+      "publishedAt": "2026-05-01T14:00:00.000Z"
+    },
+    {
+      "id": "blog-3",
+      "slug": "corporate-footwear-kenya",
+      "title": "Corporate Footwear: Dressing for Success in Kenya",
+      "excerpt": "Official shoes that project professionalism while keeping you comfortable through long workdays.",
+      "content": "Your footwear completes your professional image. For corporate environments across Nairobi, Mombasa, and beyond, oxford and brogue styles remain the gold standard.\n\n**Leather care** — Regular polishing extends shoe life and maintains a sharp appearance for client meetings.\n\n**Rotation** — Owning two pairs of official shoes and alternating them allows materials to rest and reduces wear.\n\n**Fit for commuting** — Consider cushioned insoles if your day includes significant walking or public transport.\n\nDomas Ventures supplies corporates and institutions with bulk orders and consistent sizing — contact us for enterprise pricing.",
+      "image": "https://images.unsplash.com/photo-1614252235356-8f857d38b3f0?w=800&h=500&fit=crop",
+      "author": "Domas Ventures Team",
+      "category": "Business",
+      "publishedAt": "2026-05-10T09:00:00.000Z"
+    }
+  ],
+  "admin": {
+    "passwordHash": "$2b$10$6SBmGwnzjdpQZXg3/yiHX.6hOZ20n1FrRb9CKZHV16MNqnL22WPsO"
+  }
+}

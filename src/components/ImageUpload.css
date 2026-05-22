@@ -1,0 +1,117 @@
+.image-upload {
+  margin-bottom: 1.5rem;
+}
+
+.image-upload-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.image-upload-dropzone {
+  border: 2px dashed var(--ivory-dark);
+  background: var(--ivory);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.image-upload-dropzone:hover,
+.image-upload-dropzone.is-dragging {
+  border-color: var(--gold);
+  background: rgba(201, 169, 98, 0.06);
+}
+
+.image-upload-dropzone.is-dragging {
+  border-style: solid;
+}
+
+.image-upload-dropzone.is-loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.dropzone-icon {
+  color: var(--gold);
+  margin: 0 auto 1rem;
+}
+
+.dropzone-title {
+  display: block;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--black);
+  margin-bottom: 0.35rem;
+}
+
+.dropzone-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.image-upload-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.image-upload-preview {
+  position: relative;
+  border: 1px solid var(--ivory-dark);
+  background: var(--ivory);
+  overflow: hidden;
+}
+
+.image-upload-preview img {
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  display: block;
+}
+
+.image-upload-preview-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-top: 1px solid var(--ivory-dark);
+  background: var(--white);
+}
+
+.image-upload-url {
+  margin-top: 1rem;
+}
+
+.url-divider {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.image-upload-url input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ivory-dark);
+  border-radius: 0;
+  font-size: 0.9rem;
+  background: var(--white);
+}
+
+.image-upload-url input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.image-upload-error {
+  color: #c45c5c;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}

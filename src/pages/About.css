@@ -1,0 +1,152 @@
+.about-page {
+  background: var(--ivory);
+}
+
+.about-hero {
+  background: var(--black);
+  text-align: center;
+  padding: 5rem 0 4rem;
+  margin-top: -65px;
+  padding-top: calc(5rem + 65px);
+}
+
+.about-hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.about-motto {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+
+.about-body {
+  padding: 5rem 0;
+}
+
+.about-intro {
+  max-width: 600px;
+  margin: 0 auto 4rem;
+  text-align: center;
+}
+
+.about-intro p {
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.8;
+  margin-top: 1.25rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--ivory-dark);
+  margin-bottom: 4rem;
+}
+
+.about-card {
+  background: var(--white);
+  padding: 2.5rem;
+}
+
+.about-card-num {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.about-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.about-card p {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.about-section {
+  margin-bottom: 3.5rem;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+}
+
+.values-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.value-tag {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--ivory-dark);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: border-color var(--ease), color var(--ease);
+}
+
+.value-tag:hover {
+  border-color: var(--gold);
+  color: var(--black);
+}
+
+.about-list {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.about-list li {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--ivory-dark);
+  font-size: 0.92rem;
+  font-weight: 300;
+  color: var(--text-muted);
+}
+
+.about-text {
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-top: 1rem;
+}
+
+.about-cta {
+  text-align: center;
+  padding: 4rem 0 0;
+  border-top: 1px solid var(--ivory-dark);
+}
+
+.about-cta h2 {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .about-grid,
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+}
