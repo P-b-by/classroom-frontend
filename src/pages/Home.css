@@ -37,9 +37,8 @@
 .hero-skeleton {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-  filter: blur(2px);
-  opacity: 1;
+   z-index: 1;
+   pointer-events: none;
   transition: opacity 650ms ease;
 }
 
