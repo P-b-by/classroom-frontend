@@ -205,22 +205,27 @@ app.delete('/api/admin/blog/:id', requireAdmin, async (req, res) => {
   res.json({ ok: true });
 });
 
-// Serve the frontend build when available.
+
+
+
+
+
+
+
+
+// Serve the frontend build directly
 const distPath = path.join(__dirname, '../dist');
 const indexHtml = path.join(distPath, 'index.html');
-try {
-  await fs.access(indexHtml);
-  app.use(express.static(distPath));
-  app.get('*', (req, res) => {
-    if (req.path.startsWith('/api')) {
-      return res.status(404).json({ error: 'Not found' });
-    }
-    res.sendFile(indexHtml);
-  });
-} catch (error) {
-  console.warn('Warning: frontend build not found. Run `npm run build` before deploying or while running the server.');
-}
 
+app.use(express.static(distPath));
+
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'Not found' });
+  }
+  res.sendFile(indexHtml);
+});
 app.listen(PORT, () => {
   console.log(`API server running on http://localhost:${PORT}`);
 });
+
