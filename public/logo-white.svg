@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" aria-hidden="false" role="img">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e6d39a" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="transparent" />
+  <g transform="translate(600,420)">
+    <circle r="260" fill="none" stroke="url(#g)" stroke-width="18" />
+    <text x="0" y="45" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="320" fill="#ffffff" font-weight="700">V</text>
+  </g>
+  <g transform="translate(600,820)" text-anchor="middle">
+    <text x="0" y="-10" font-family="Cormorant Garamond, Georgia, serif" font-size="64" fill="#ffffff" letter-spacing="4">DOMAS</text>
+    <text x="0" y="48" font-family="Outfit, system-ui, sans-serif" font-size="28" fill="#e6d39a" letter-spacing="6">VENTURES</text>
+  </g>
+</svg>
