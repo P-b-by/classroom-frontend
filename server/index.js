@@ -259,6 +259,43 @@ app.post('/api/orders', async (req, res) => {
     res.status(500).json({ error: 'Order failed' });
   }
 });
+//nnn
+app.post('/api/orders', async (req, res) => {
+  try {
+    const { customerName, customerEmail, customerPhone, shippingAddress, items, total } = req.body || {};
+
+    // 1. Validation Checks
+    if (!customerName || !customerEmail || !customerPhone) {
+      return res.status(400).json({ error: 'Missing customer contact information (Name, Email, or Phone).' });
+    }
+
+    if (!shippingAddress || !shippingAddress.street || !shippingAddress.city) {
+      return res.status(400).json({ error: 'Incomplete shipping address details.' });
+    }
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'Your cart is empty. Cannot place an empty order.' });
+    }
+
+    // 2. Save complete data package to MongoDB Atlas
+    const order = new Order({
+      customerName,
+      customerEmail,
+      customerPhone,
+      shippingAddress,
+      items,
+      total
+    });
+
+    await order.save();
+    res.status(201).json({ success: true, order });
+
+  } catch (err) {
+    console.error('Order Submission Error:', err);
+    res.status(500).json({ error: 'Internal server error processing your order. Please try again.' });
+  }
+});
+
 
 app.delete('/api/admin/orders/:id', requireAdmin, async (req, res) => {
   try {
