@@ -142,7 +142,7 @@ const OrderSchema = new mongoose.Schema({
     selectedSize: String
   }],
   total: Number,
-  status: { type: String, default: 'Pending' }
+  status: { type: String, default: 'pending' }
 }, { 
   timestamps: true // Automatically tracks 'createdAt' (Order Placement Time) and 'updatedAt'
 });

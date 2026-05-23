@@ -18,10 +18,10 @@ export default function AdminOrders() {
     );
   }
 
-  const pendingOrders = orders.filter(o => o.status === 'pending');
-  const confirmedOrders = orders.filter(o => o.status === 'confirmed' || o.status === 'Confirmed');
-  const cancelledOrders = orders.filter(o => o.status === 'cancelled' || o.status === 'Cancelled');
-  const deliveredOrders = orders.filter(o => o.status === 'delivered' || o.status === 'Delivered');
+  const pendingOrders = orders.filter(o => o.status?.toLowerCase() === 'pending');
+  const confirmedOrders = orders.filter(o => o.status?.toLowerCase() === 'confirmed');
+  const cancelledOrders = orders.filter(o => o.status?.toLowerCase() === 'cancelled');
+  const deliveredOrders = orders.filter(o => o.status?.toLowerCase() === 'delivered');
 
   const tabs = [
     { id: 'pending', label: 'Pending Orders', count: pendingOrders.length, color: '#f39c12' },

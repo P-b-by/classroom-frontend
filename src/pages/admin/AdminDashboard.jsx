@@ -3,7 +3,7 @@ import { useStore } from '../../context/StoreContext.jsx';
 
 export default function AdminDashboard() {
   const { products, orders, blogPosts } = useStore();
-  const pendingOrders = orders.filter((o) => o.status === 'pending').length;
+  const pendingOrders = orders.filter((o) => o.status?.toLowerCase() === 'pending').length;
   const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
 
   return (
