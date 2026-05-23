@@ -39,10 +39,30 @@ const ProductSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const OrderSchema = new mongoose.Schema({
-  items: Array,
+  // Customer Demographics
+  customerName: String,
+  customerEmail: String,
+  customerPhone: String,
+  shippingAddress: {
+    street: String,
+    city: String,
+    postalCode: String,
+    country: String
+  },
+  // Product & Financial details
+  items: [{
+    productId: String,
+    name: String,
+    price: Number,
+    quantity: Number,
+    selectedSize: String
+  }],
   total: Number,
   status: { type: String, default: 'Pending' }
-}, { timestamps: true });
+}, { 
+  timestamps: true // Automatically tracks 'createdAt' (Order Placement Time) and 'updatedAt'
+});
+
 
 const BlogSchema = new mongoose.Schema({
   title: String,
