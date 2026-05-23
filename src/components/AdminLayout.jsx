@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useStore } from '../context/StoreContext.jsx';
-import axios from 'axios';
-import './Orders.css'; // Make sure this matches your existing CSS filename or create it
+import './AdminLayout.css'; // Make sure this matches your existing CSS filename or create it
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -10,9 +9,10 @@ export default function Orders() {
 
   useEffect(() => {
     // Fetches your comprehensive order list from our updated MongoDB routing api
-    axios.get('/api/orders')
-      .then((res) => {
-        setOrders(res.data || []);
+    fetch('/api/orders', { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => {
+        setOrders(data || []);
         setLoading(false);
       })
       .catch((err) => {

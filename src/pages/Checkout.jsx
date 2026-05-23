@@ -54,11 +54,45 @@ export default function Checkout() {
 
   const validate = () => {
     const errs = {};
-    if (!form.name.trim()) errs.name = 'Name is required';
+    
+    // Name validation
+    if (!form.name.trim()) {
+      errs.name = 'Name is required';
+    } else if (form.name.trim().length < 2) {
+      errs.name = 'Name must be at least 2 characters';
+    } else if (/<[^>]*>/.test(form.name)) {
+      errs.name = 'Name contains invalid characters';
+    }
+    
+    // Gender validation
     if (!form.gender) errs.gender = 'Please select your gender';
-    if (!form.phone.trim()) errs.phone = 'Phone number is required';
+    
+    // Phone validation
+    if (!form.phone.trim()) {
+      errs.phone = 'Phone number is required';
+    } else if (!/^[\d\s\-\+\(\)]+$/.test(form.phone)) {
+      errs.phone = 'Invalid phone number format';
+    } else if (form.phone.replace(/\D/g, '').length < 10) {
+      errs.phone = 'Phone number must be at least 10 digits';
+    }
+    
+    // Email validation (optional but must be valid if provided)
+    if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      errs.email = 'Invalid email format';
+    }
+    
+    // County validation
     if (!form.county) errs.county = 'Please select your county';
-    if (!form.address.trim()) errs.address = 'Delivery address is required';
+    
+    // Address validation
+    if (!form.address.trim()) {
+      errs.address = 'Delivery address is required';
+    } else if (form.address.trim().length < 10) {
+      errs.address = 'Please provide a complete delivery address';
+    } else if (/<[^>]*>/.test(form.address)) {
+      errs.address = 'Address contains invalid characters';
+    }
+    
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };

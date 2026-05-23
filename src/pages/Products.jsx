@@ -100,7 +100,7 @@ export default function Products() {
           ) : (
             <div className="grid-products">
               {filtered.map((p) => (
-                <ProductCard key={p.id} product={p} />
+                <ProductCard key={p._id} product={p} />
               ))}
             </div>
           )}
