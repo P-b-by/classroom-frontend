@@ -135,6 +135,9 @@ app.use(
   }),
 );
 
+
+
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
@@ -143,12 +146,16 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
     cookie: {
       httpOnly: true,
-      secure: cookieSecure,
-      sameSite: cookieSameSite,
+      // 🔹 FIX: Switch secure to false if you are testing locally, true on Render
+      secure: isProduction, 
+      // 🔹 FIX: On Render, 'lax' is much more stable than 'none' for keeping you logged in
+      sameSite: isProduction ? 'lax' : 'lax', 
       maxAge: 1000 * 60 * 60 * 4, // 4 hours
     },
   }),
 );
+
+
 
 console.log('Backend config:');
 console.log(`  NODE_ENV=${process.env.NODE_ENV}`);
