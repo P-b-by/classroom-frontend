@@ -1,10 +1,10 @@
 services:
   - type: web_service
-    name: classroom-backend
+    name: domas-ventures
     env: node
     branch: main
     buildCommand: npm install && npm run build
-    startCommand: npm start
+    startCommand: node server/index.js
     plan: starter
     envVars:
       - key: NODE_ENV
@@ -14,19 +14,8 @@ services:
       - key: ADMIN_PASSWORD
         value: replace-with-a-strong-password
       - key: CORS_ALLOWED_ORIGINS
-        value: https://your-frontend-url.vercel.app
+        value: https://domasventures.onrender.com
       - key: COOKIE_SAME_SITE
         value: none
       - key: TRUST_PROXY
         value: "1"
-
-  - type: static_site
-    name: classroom-frontend
-    env: static
-    branch: main
-    buildCommand: npm run build
-    staticPublishPath: dist
-    plan: starter
-    envVars:
-      - key: VITE_API_URL
-        value: https://your-backend-url.onrender.com
