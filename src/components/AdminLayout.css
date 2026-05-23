@@ -1,76 +1,166 @@
+:root {
+  --admin-dark-panel: #0a0f1d;
+  --admin-accent-gold: #d4af37;
+  --admin-gold-glow: rgba(212, 175, 55, 0.15);
+  --admin-bg-main: #f8fafc;
+  --admin-txt-bright: #ffffff;
+  --admin-txt-dim: #94a3b8;
+  --admin-border-subtle: rgba(212, 175, 55, 0.12);
+  --admin-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .admin-app {
   display: flex;
   min-height: 100vh;
-  background: var(--ivory);
+  background: var(--admin-bg-main);
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
+/* Premium Sidebar Layout Configuration */
 .admin-sidebar {
   width: 260px;
-  background: var(--black);
-  color: var(--text-soft);
-  padding: 2rem 1.5rem;
+  background: var(--admin-dark-panel);
+  color: var(--admin-txt-dim);
+  padding: 2.5rem 1.5rem;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--gold-muted);
+  border-right: 1px solid var(--admin-border-subtle);
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
 }
 
+/* Elegant Brand Component Header */
 .admin-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  margin-bottom: 2.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .admin-brand strong {
   display: block;
-  font-size: 0.68rem;
-  letter-spacing: 0.2em;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--admin-accent-gold);
+  margin-top: 0.75rem;
+  text-shadow: 0 2px 10px var(--admin-gold-glow);
 }
 
 .admin-brand small {
-  font-size: 0.65rem;
-  opacity: 0.5;
+  font-size: 0.7rem;
+  color: var(--admin-txt-dim);
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
 }
 
+/* Micro-Animated Navigation Parameters */
 .admin-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.4rem;
   flex: 1;
 }
 
 .admin-nav a {
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.25rem;
   font-size: 0.8rem;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-soft);
-  transition: color var(--ease), background var(--ease);
+  color: var(--admin-txt-dim);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: color 0.25s var(--admin-ease-smooth), 
+              background 0.25s var(--admin-ease-smooth),
+              transform 0.2s var(--admin-ease-smooth);
 }
 
-.admin-nav a:hover,
+.admin-nav a:hover {
+  color: var(--admin-txt-bright);
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateX(4px);
+}
+
 .admin-nav a.active {
-  color: var(--gold);
-  background: rgba(201, 169, 98, 0.08);
+  color: var(--admin-dark-panel);
+  background: var(--admin-accent-gold);
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+  transform: translateX(4px);
 }
 
+/* Interactive View Storefront Link Shortcut */
+.admin-nav a[href="/"] {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 1.5rem;
+  color: var(--admin-accent-gold);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.admin-nav a[href="/"]:hover {
+  color: var(--admin-txt-bright);
+  background: transparent;
+}
+
+/* Premium Outlined Execution Logout Controller */
 .logout-btn {
-  border-color: var(--gold-muted) !important;
-  color: var(--gold) !important;
-  margin-top: 1rem;
+  background: transparent !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+  color: #f87171 !important;
+  padding: 0.75rem !important;
+  border-radius: 10px !important;
+  margin-top: 1.5rem;
   width: 100%;
-  font-size: 0.72rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  cursor: pointer;
+  transition: all 0.2s var(--admin-ease-smooth) !important;
 }
 
+.logout-btn:hover {
+  background: #ef4444 !important;
+  color: var(--admin-txt-bright) !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.25);
+}
+
+/* Main Functional Area Window */
 .admin-main {
   flex: 1;
-  padding: 2.5rem;
-  overflow: auto;
+  padding: 3rem;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
-@media (max-width: 768px) {
-  .admin-app { flex-direction: column; }
-  .admin-sidebar { width: 100%; }
+/* Responsive Adaptive View Rules */
+@media (max-width: 968px) {
+  .admin-app { 
+    flex-direction: column; 
+  }
+  .admin-sidebar { 
+    width: 100%; 
+    padding: 1.5rem;
+    border-right: none;
+    border-bottom: 1px solid var(--admin-border-subtle);
+  }
+  .admin-brand {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+  .admin-nav a:hover, .admin-nav a.active {
+    transform: none;
+  }
+  .admin-main {
+    padding: 2rem 1.5rem;
+  }
 }
