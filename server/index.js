@@ -141,16 +141,14 @@ app.use(
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
-    resave: false,
-    saveUninitialized: false,
+    resave: true,              // Forced session update saving
+    saveUninitialized: true,   // Forced session initialization tracking
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
     cookie: {
       httpOnly: true,
-      // 🔹 FIX: Switch secure to false if you are testing locally, true on Render
-      secure: isProduction, 
-      // 🔹 FIX: On Render, 'lax' is much more stable than 'none' for keeping you logged in
-      sameSite: isProduction ? 'lax' : 'lax', 
-      maxAge: 1000 * 60 * 60 * 4, // 4 hours
+      secure: false,           // Set to false to ensure cookies transmit over Render's proxy pipeline smoothly
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 24, // Increase to 24 hours
     },
   }),
 );
