@@ -277,6 +277,16 @@ textarea {
   color: var(--green);
 }
 
+.badge-confirmed {
+  background: rgba(26, 122, 58, 0.1);
+  color: var(--green);
+}
+
+.badge-delivered {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
 .badge-cancelled {
   background: rgba(196, 92, 92, 0.1);
   color: #c45c5c;
