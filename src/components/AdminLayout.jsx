@@ -9,8 +9,17 @@ export default function AdminLayout() {
   const location = useLocation();
   const isLoginPage = location.pathname === '/admin/login';
 
-  // while admin status is unknown, don't render admin UI or redirect
-  if (isAdmin === null) return null;
+  // 🔹 FIX 1: If loading state is active, render a sleek placeholder instead of breaking the DOM tree
+  if (isAdmin === null) {
+    return (
+      <div className="admin-loading-screen" style={{
+        display: 'flex', justifyContent: 'center', alignItems: 'center', 
+        minHeight: '100vh', background: '#0f172a', color: '#ffffff'
+      }}>
+        <div className="spinner">Verifying credentials...</div>
+      </div>
+    );
+  }
 
   if (isLoginPage) {
     return <Outlet />;
