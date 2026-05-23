@@ -40,6 +40,16 @@
   100% { transform: translateY(0px); }
 }
 
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 4px 12px rgba(197,157,59,0.3); }
+  50% { box-shadow: 0 6px 20px rgba(197,157,59,0.5); }
+}
+
 *,
 *::before,
 *::after {
