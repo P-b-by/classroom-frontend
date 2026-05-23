@@ -179,8 +179,8 @@ export default function Home() {
           <div className="container">
             <header className="section-header section-header--row">
               <div>
-                <span className="section-label">Journal</span>
-                <h2 className="section-title">From the Blog</h2>
+                <span className="section-label">The Journal</span>
+                <h2 className="section-title">Fashion Insights</h2>
               </div>
               <Link to="/blog" className="link-gold">All Articles →</Link>
             </header>
@@ -189,6 +189,9 @@ export default function Home() {
                 <Link key={post.id} to={`/blog/${post.slug}`} className="blog-teaser-card">
                   <img src={post.image} alt="" loading="lazy" />
                   <div>
+                    <span className="badge badge-gold" style={{ marginBottom: '0.5rem', display: 'inline-block' }}>
+                      {post.category}
+                    </span>
                     <h3>{post.title}</h3>
                     <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
                   </div>

@@ -11,22 +11,25 @@ export default function Blog() {
 
   return (
     <div className="blog-page">
-      <div className="page-hero-bar">
+      <header className="page-hero-bar">
         <div className="container">
-          <span className="section-label">Journal</span>
-          <h1 className="page-title">The Domas Blog</h1>
+          <span className="section-label">The Journal</span>
+          <h1 className="page-title">Fashion Insights</h1>
           <div className="gold-line" />
           <p className="page-subtitle">
-            Style guides, footwear tips, and stories from the world of fashion and confidence.
+            Exploring the intersection of luxury footwear, sustainable fashion, and modern style.
           </p>
         </div>
-      </div>
+      </header>
 
       <div className="container blog-list-wrap">
         {sorted.length === 0 ? (
           <div className="empty-state blog-empty">
+            <div style={{ marginBottom: '2rem' }}>
+              <span style={{ fontSize: '3rem', opacity: 0.3 }}>✦</span>
+            </div>
             <h3>No articles yet</h3>
-            <p>Check back soon for style tips and footwear insights.</p>
+            <p>Check back soon for fashion insights and style inspiration.</p>
           </div>
         ) : (
           <div className="blog-grid">
@@ -46,7 +49,7 @@ export default function Blog() {
                     </span>
                     <h2>{post.title}</h2>
                     <p>{post.excerpt}</p>
-                    <span className="blog-read-more">Read Article →</span>
+                    <span className="blog-read-more">Read Article</span>
                   </div>
                 </Link>
               </article>

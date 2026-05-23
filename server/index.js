@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import nodemailer from 'nodemailer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
@@ -28,6 +29,87 @@ const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected securely to MongoDB Atlas Cloud!'))
   .catch(err => console.error('Database connection error:', err));
+
+// Email transporter setup
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+  port: process.env.EMAIL_PORT || 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// Email sending function
+async function sendOrderConfirmationEmail(order) {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.log('Email credentials not configured, skipping email');
+    return;
+  }
+
+  if (!order.customerEmail) {
+    console.log('No customer email provided, skipping email');
+    return;
+  }
+
+  const isConfirmed = order.status === 'confirmed' || order.status === 'Confirmed';
+  const emailTitle = isConfirmed ? 'Order Confirmed' : 'Order Received';
+  const emailMessage = isConfirmed 
+    ? 'We\'re pleased to confirm that your order has been confirmed and is being processed.'
+    : 'We\'ve received your order and we\'ll process it shortly.';
+
+  const mailOptions = {
+    from: `"Domas Ventures" <${process.env.EMAIL_USER}>`,
+    to: order.customerEmail,
+    subject: `${emailTitle} - Domas Ventures`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+          <h1 style="color: #c59d3b; margin: 0; font-size: 28px;">Domas Ventures</h1>
+          <p style="color: rgba(255,255,255,0.7); margin: 5px 0 0;">Luxury Footwear</p>
+        </div>
+        <div style="background: #f8f6f3; padding: 30px; border-radius: 0 0 10px 10px;">
+          <h2 style="color: #0a0a0a; margin-top: 0;">${emailTitle}!</h2>
+          <p style="color: #666;">Dear ${order.customerName},</p>
+          <p style="color: #666;">${emailMessage} Thank you for shopping with Domas Ventures.</p>
+          
+          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #e0e0e0;">
+            <h3 style="color: #0a0a0a; margin-top: 0;">Order Details:</h3>
+            <p style="color: #666;"><strong>Order ID:</strong> ${order._id?.slice(-6).toUpperCase() || order.id?.slice(-6).toUpperCase() || 'N/A'}</p>
+            <p style="color: #666;"><strong>Total:</strong> KES ${(order.total || 0).toLocaleString()}</p>
+            <p style="color: #666;"><strong>Status:</strong> ${order.status || 'Pending'}</p>
+          </div>
+
+          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #e0e0e0;">
+            <h3 style="color: #0a0a0a; margin-top: 0;">Delivery Information:</h3>
+            <p style="color: #666;"><strong>Address:</strong> ${order.shippingAddress?.street || 'N/A'}, ${order.shippingAddress?.city || 'N/A'}</p>
+            <p style="color: #666;"><strong>Expected Delivery:</strong> Within 3 business days</p>
+          </div>
+
+          ${isConfirmed ? `
+          <div style="background: linear-gradient(135deg, #c59d3b 0%, #e6d39a 100%); padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+            <p style="color: #0a0a0a; margin: 0; font-weight: bold;">🎉 Your order has been confirmed! We'll ship it to you within 3 business days.</p>
+          </div>
+          ` : ''}
+
+          <p style="color: #666;">If you have any questions about your order, please don't hesitate to contact us.</p>
+          
+          <div style="text-align: center; margin-top: 30px;">
+            <p style="color: #999; font-size: 12px;">© 2026 Domas Ventures. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Order email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+}
 
 // Database Schemas & Models
 const ProductSchema = new mongoose.Schema({
@@ -440,6 +522,10 @@ app.post('/api/orders', async (req, res) => {
     });
 
     await order.save();
+    
+    // Send order received email
+    await sendOrderConfirmationEmail(order);
+    
     res.status(201).json({ success: true, order });
 
   } catch (err) {
@@ -460,9 +546,17 @@ app.delete('/api/admin/orders/:id', requireAdmin, async (req, res) => {
 
 app.put('/api/admin/orders/:id', requireAdmin, async (req, res) => {
   try {
-    await Order.findByIdAndUpdate(req.params.id, { status: req.body.status });
-    res.json({ ok: true });
+    const { status } = req.body;
+    const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    
+    if (status === 'confirmed' || status === 'Confirmed') {
+      // Send confirmation email when order is confirmed
+      await sendOrderConfirmationEmail(order);
+    }
+    
+    res.json({ ok: true, order });
   } catch (err) {
+    console.error('Error updating order:', err);
     res.status(500).json({ error: 'Failed to update order' });
   }
 });

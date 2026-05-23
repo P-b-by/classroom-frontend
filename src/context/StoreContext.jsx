@@ -134,7 +134,14 @@ export function StoreProvider({ children }) {
     // Handle both old and new customer data structures
     const order = {
       id: `ORD-${Date.now()}`,
-      items: [...cart],
+      items: cart.map(item => ({
+        productId: item.productId,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        quantity: item.quantity,
+        selectedSize: item.size
+      })),
       total: cartTotal,
       status: 'pending',
       createdAt: new Date().toISOString(),
@@ -244,31 +251,42 @@ export function StoreProvider({ children }) {
     if (isAdmin) {
       (async () => {
         try {
-          await fetch(`/api/admin/orders/${id}`, { method: 'DELETE', credentials: 'include' });
+          // Use MongoDB _id if available, otherwise use client ID
+          const orderId = id.includes('ORD-') ? id : id;
+          await fetch(`/api/admin/orders/${orderId}`, { method: 'DELETE', credentials: 'include' });
         } catch (e) {
+          console.error('Delete order error:', e);
           /* ignore */
         }
       })();
     }
-    setOrders((prev) => prev.filter((o) => o.id !== id));
+    setOrders((prev) => prev.filter((o) => (o._id || o.id) !== id));
   };
 
   const updateOrderStatus = (id, status) => {
     if (isAdmin) {
       (async () => {
         try {
-          await fetch(`/api/admin/orders/${id}`, {
+          // Use MongoDB _id if available, otherwise use client ID
+          const orderId = id.includes('ORD-') ? id : id;
+          const res = await fetch(`/api/admin/orders/${orderId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status }),
             credentials: 'include',
           });
+          if (res.ok) {
+            // Only update local state if server update succeeded
+            setOrders((prev) => prev.map((o) => (o._id === id || o.id === id ? { ...o, status } : o)));
+          }
         } catch (e) {
+          console.error('Update order status error:', e);
           /* ignore */
         }
       })();
     }
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+    // Optimistic update for immediate feedback
+    setOrders((prev) => prev.map((o) => (o._id === id || o.id === id ? { ...o, status } : o)));
   };
 
   const loginAdmin = async (password) => {
