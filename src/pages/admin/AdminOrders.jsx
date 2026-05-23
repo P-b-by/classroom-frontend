@@ -23,46 +23,69 @@ export default function AdminOrders() {
       <p className="page-subtitle">{orders.length} order(s) received</p>
 
       <div className="orders-list">
-        {orders.map((order) => (
-          <div key={order.id} className="order-card">
+        {orders.map((order) => {
+          const orderId = order._id || order.id;
+          return (
+          <div key={orderId} className="order-card">
             <div
               className="order-header"
-              onClick={() => setExpanded(expanded === order.id ? null : order.id)}
+              onClick={() => setExpanded(expanded === orderId ? null : orderId)}
             >
               <div>
-                <strong>{order.id}</strong>
+                <strong>{orderId?.slice(-6).toUpperCase() || orderId}</strong>
                 <span className="order-date">
                   {new Date(order.createdAt).toLocaleString()}
                 </span>
               </div>
               <div className="order-header-right">
                 <span className={`badge badge-${order.status}`}>{order.status}</span>
-                <span className="order-total">KES {order.total.toLocaleString()}</span>
-                <span className="expand-icon">{expanded === order.id ? '▲' : '▼'}</span>
+                <span className="order-total">KES {(order.total || 0).toLocaleString()}</span>
+                <span className="expand-icon">{expanded === orderId ? '▲' : '▼'}</span>
               </div>
             </div>
 
-            {expanded === order.id && (
+            {expanded === orderId && (
               <div className="order-details">
                 <div className="detail-grid">
                   <div>
                     <h4>Customer Details</h4>
-                    <p><strong>Name:</strong> {order.customer.name}</p>
-                    <p><strong>Gender:</strong> {order.customer.gender}</p>
-                    <p><strong>Phone:</strong> {order.customer.phone}</p>
-                    {order.customer.email && (
-                      <p><strong>Email:</strong> {order.customer.email}</p>
+                    <p><strong>Name:</strong> {order.customerName || order.customer?.name || 'N/A'}</p>
+                    {order.customer?.gender && (
+                      <p><strong>Gender:</strong> {order.customer.gender}</p>
                     )}
-                    <p><strong>County:</strong> {order.customer.county}</p>
-                    <p><strong>Address:</strong> {order.customer.address}</p>
+                    <p><strong>Phone:</strong> {order.customerPhone || order.customer?.phone || 'N/A'}</p>
+                    {(order.customerEmail || order.customer?.email) && (
+                      <p><strong>Email:</strong> {order.customerEmail || order.customer?.email}</p>
+                    )}
+                    {order.shippingAddress ? (
+                      <>
+                        <p><strong>City:</strong> {order.shippingAddress.city || order.customer?.county || 'N/A'}</p>
+                        <p><strong>Address:</strong> {order.shippingAddress.street || order.customer?.address || 'N/A'}</p>
+                        {order.shippingAddress.country && (
+                          <p><strong>Country:</strong> {order.shippingAddress.country}</p>
+                        )}
+                        {order.shippingAddress.postalCode && (
+                          <p><strong>Postal Code:</strong> {order.shippingAddress.postalCode}</p>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {order.customer?.county && (
+                          <p><strong>County:</strong> {order.customer.county}</p>
+                        )}
+                        {order.customer?.address && (
+                          <p><strong>Address:</strong> {order.customer.address}</p>
+                        )}
+                      </>
+                    )}
                   </div>
                   <div>
                     <h4>Order Items</h4>
                     <ul className="order-items-list">
-                      {order.items.map((item, i) => (
+                      {(order.items || []).map((item, i) => (
                         <li key={i}>
-                          {item.name} — Size {item.size} × {item.quantity} = KES{' '}
-                          {(item.price * item.quantity).toLocaleString()}
+                          {item.name || 'Unknown Product'} — Size {item.selectedSize || item.size || 'N/A'} × {item.quantity || 1} = KES{' '}
+                          {((item.price || 0) * (item.quantity || 1)).toLocaleString()}
                         </li>
                       ))}
                     </ul>
@@ -88,7 +111,7 @@ export default function AdminOrders() {
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => {
-                      if (window.confirm('Delete this order?')) deleteOrder(order.id);
+                      if (window.confirm('Delete this order?')) deleteOrder(orderId);
                     }}
                   >
                     Delete
@@ -97,7 +120,8 @@ export default function AdminOrders() {
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
 
       <style>{`

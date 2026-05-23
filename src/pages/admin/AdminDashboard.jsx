@@ -64,14 +64,14 @@ export default function AdminDashboard() {
               </thead>
               <tbody>
                 {orders.slice(0, 5).map((order) => (
-                  <tr key={order.id}>
-                    <td>{order.id}</td>
-                    <td>{order.customer.name}</td>
-                    <td>{order.customer.county}</td>
-                    <td>KES {order.total.toLocaleString()}</td>
+                  <tr key={order.id || order._id}>
+                    <td>{order.id || order._id?.slice(-6)}</td>
+                    <td>{order.customerName || order.customer?.name || 'N/A'}</td>
+                    <td>{order.shippingAddress?.city || order.customer?.county || 'N/A'}</td>
+                    <td>KES {(order.total || 0).toLocaleString()}</td>
                     <td>
                       <span className={`badge badge-${order.status}`}>
-                        {order.status}
+                        {order.status || 'Pending'}
                       </span>
                     </td>
                   </tr>

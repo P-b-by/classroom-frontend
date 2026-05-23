@@ -131,13 +131,22 @@ export function StoreProvider({ children }) {
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const placeOrder = (customerDetails) => {
+    // Handle both old and new customer data structures
     const order = {
       id: `ORD-${Date.now()}`,
       items: [...cart],
       total: cartTotal,
       status: 'pending',
       createdAt: new Date().toISOString(),
-      customer: customerDetails,
+      customerName: customerDetails.name || customerDetails.customerName || '',
+      customerEmail: customerDetails.email || customerDetails.customerEmail || '',
+      customerPhone: customerDetails.phone || customerDetails.customerPhone || '',
+      shippingAddress: {
+        street: customerDetails.address || customerDetails.shippingAddress?.street || '',
+        city: customerDetails.county || customerDetails.shippingAddress?.city || '',
+        postalCode: customerDetails.shippingAddress?.postalCode || '',
+        country: customerDetails.shippingAddress?.country || 'Kenya'
+      },
     };
     setOrders((prev) => [order, ...prev]);
     clearCart();
