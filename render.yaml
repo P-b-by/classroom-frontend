@@ -6,18 +6,3 @@ services:
     buildCommand: npm install && npm run build
     startCommand: node server/index.js
     plan: starter
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: SESSION_SECRET
-        value: domas-ventures-production-secret-2024
-      - key: ADMIN_PASSWORD
-        value: Domas@Admin2024!Secure
-      - key: MONGODB_URI
-        value: mongodb+srv://paulmacharianderi_db_user:wId7gxWMdpNXxEkj@cluster0.dopxnbd.mongodb.net/?appName=Cluster0
-      - key: CORS_ALLOWED_ORIGINS
-        value: https://domasventures.onrender.com,https://domas-ventures.onrender.com
-      - key: COOKIE_SAME_SITE
-        value: none
-      - key: TRUST_PROXY
-        value: "1"
