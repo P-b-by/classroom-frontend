@@ -485,7 +485,6 @@ app.get('/api/products', async (req, res) => {
       .sort({ _id: -1 })
       .limit(50)
       .lean()
-      .timeout(5000) // 5 second timeout
       .exec();
     
     console.log(`Found ${products.length} products`);
@@ -505,8 +504,6 @@ app.get('/api/products', async (req, res) => {
     res.json(formattedProducts);
   } catch (err) {
     console.error('Failed to retrieve products:', err);
-    // For development, return empty array if database query fails
-    // This allows the frontend to function while we debug the query issue
     res.status(500).json({ error: 'Failed to retrieve products' });
   }
 });
