@@ -26,13 +26,23 @@ const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS
   ? process.env.CORS_ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
   : ['http://localhost:5173'];
 
+// Log environment configuration for debugging
+console.log('Backend config:');
+console.log('  NODE_ENV=', process.env.NODE_ENV);
+console.log('  CORS_ALLOWED_ORIGINS=', process.env.CORS_ALLOWED_ORIGINS);
+console.log('  COOKIE_SAME_SITE=', process.env.COOKIE_SAME_SITE);
+console.log('  TRUST_PROXY=', process.env.TRUST_PROXY);
+console.log('  PORT=', PORT);
+console.log('  MONGODB_URI=', process.env.MONGODB_URI ? 'SET' : 'NOT SET');
+
 // Connect to MongoDB Atlas Cloud Database
 const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/classroom';
 mongoose.connect(mongoUri)
   .then(() => console.log('Connected securely to MongoDB Atlas Cloud!'))
   .catch(err => {
     console.error('Database connection error:', err);
-    process.exit(1); // Exit if database connection fails
+    // Don't exit on connection error - allow server to start in degraded mode
+    console.error('Server will start but database operations will fail');
   });
 
 // Request logging middleware
@@ -774,14 +784,21 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error', message: err.message });
 });
 
-// Only start server after database connection is established
-mongoose.connection.once('connected', () => {
-  app.listen(PORT, () => {
-    console.log(`API server running on http://localhost:${PORT}`);
-  });
+// Start server immediately (don't wait for MongoDB connection)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`API server running on port ${PORT}`);
+  console.log(`Environment: ${isProduction ? 'production' : 'development'}`);
+});
+
+// Log MongoDB connection status
+mongoose.connection.on('connected', () => {
+  console.log('MongoDB connected successfully');
 });
 
 mongoose.connection.on('error', (err) => {
   console.error('MongoDB connection error:', err);
-  process.exit(1);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected');
 });
