@@ -26,7 +26,7 @@ const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS
   : ['http://localhost:5173'];
 
 // Connect to MongoDB Atlas Cloud Database
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/classroom')
   .then(() => console.log('Connected securely to MongoDB Atlas Cloud!'))
   .catch(err => console.error('Database connection error:', err));
 
@@ -262,7 +262,9 @@ app.use(
     secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
     resave: true,              // Forced session update saving
     saveUninitialized: true,   // Forced session initialization tracking
-    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/classroom',
+    }),
     cookie: {
       httpOnly: true,
       secure: cookieSecure,    // Use configured secure flag based on environment
