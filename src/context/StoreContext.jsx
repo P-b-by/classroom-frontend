@@ -160,7 +160,7 @@ export function StoreProvider({ children }) {
     // Try to persist to server
     (async () => {
       try {
-        const res = await fetch('/api/orders', {
+        const res = await fetch(`${API_BASE}/api/orders`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(order),
@@ -182,7 +182,7 @@ export function StoreProvider({ children }) {
     if (isAdmin) {
       (async () => {
         try {
-          const res = await fetch('/api/admin/products', {
+          const res = await fetch(`${API_BASE}/api/admin/products`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(product),
@@ -211,7 +211,7 @@ export function StoreProvider({ children }) {
     if (isAdmin) {
       (async () => {
         try {
-          await fetch(`/api/admin/products/${id}`, {
+          await fetch(`${API_BASE}/api/admin/products/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updates),
@@ -235,7 +235,7 @@ export function StoreProvider({ children }) {
     if (isAdmin) {
       (async () => {
         try {
-          await fetch(`/api/admin/products/${id}`, {
+          await fetch(`${API_BASE}/api/admin/products/${id}`, {
             method: 'DELETE',
             credentials: 'include',
           });
@@ -253,7 +253,7 @@ export function StoreProvider({ children }) {
         try {
           // Use MongoDB _id if available, otherwise use client ID
           const orderId = id.includes('ORD-') ? id : id;
-          await fetch(`/api/admin/orders/${orderId}`, { method: 'DELETE', credentials: 'include' });
+          await fetch(`${API_BASE}/api/admin/orders/${orderId}`, { method: 'DELETE', credentials: 'include' });
         } catch (e) {
           console.error('Delete order error:', e);
           /* ignore */
@@ -269,7 +269,7 @@ export function StoreProvider({ children }) {
         try {
           // Use MongoDB _id if available, otherwise use client ID
           const orderId = id.includes('ORD-') ? id : id;
-          const res = await fetch(`/api/admin/orders/${orderId}`, {
+          const res = await fetch(`${API_BASE}/api/admin/orders/${orderId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status }),
@@ -333,7 +333,7 @@ export function StoreProvider({ children }) {
     if (isAdmin) {
       (async () => {
         try {
-          const res = await fetch('/api/admin/blog', {
+          const res = await fetch(`${API_BASE}/api/admin/blog`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newPost),
@@ -358,7 +358,7 @@ export function StoreProvider({ children }) {
     if (isAdmin) {
       (async () => {
         try {
-          await fetch(`/api/admin/blog/${id}`, {
+          await fetch(`${API_BASE}/api/admin/blog/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updates),
@@ -382,7 +382,7 @@ export function StoreProvider({ children }) {
     if (isAdmin) {
       (async () => {
         try {
-          await fetch(`/api/admin/blog/${id}`, { method: 'DELETE', credentials: 'include' });
+          await fetch(`${API_BASE}/api/admin/blog/${id}`, { method: 'DELETE', credentials: 'include' });
         } catch (e) {
           /* ignore */
         }

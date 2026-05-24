@@ -121,6 +121,7 @@
  }
 
  .product-price,
+ .product-description,
  .size-row,
  .product-add {
    opacity: 0.96;
@@ -129,6 +130,7 @@
  }
 
  .product-card:hover .product-price,
+ .product-card:hover .product-description,
  .product-card:hover .size-row,
  .product-card:hover .product-add {
    opacity: 1;
@@ -143,6 +145,59 @@
   color: var(--text-muted);
   margin-right: 0.35rem;
   letter-spacing: 0.1em;
+}
+
+.product-description {
+  margin-bottom: 1rem;
+}
+
+.product-description p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 0 0.5rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-description p:not(:has(+ .read-more-btn)) {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.read-more-btn {
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gold);
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all var(--motion-fast);
+  position: relative;
+}
+
+.read-more-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width var(--motion-fast);
+}
+
+.read-more-btn:hover {
+  color: var(--gold-light);
+}
+
+.read-more-btn:hover::after {
+  width: 100%;
 }
 
 .size-row {

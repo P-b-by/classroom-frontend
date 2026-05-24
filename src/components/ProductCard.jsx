@@ -9,6 +9,7 @@ export default function ProductCard({ product }) {
   const productSizes = product.sizes || [];
   const [size, setSize] = useState(productSizes[0] || '');
   const [added, setAdded] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   const handleAdd = () => {
     if (!size) return;
@@ -16,6 +17,11 @@ export default function ProductCard({ product }) {
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
+
+  const description = product.description || '';
+  const maxLength = 80;
+  const shouldTruncate = description.length > maxLength;
+  const displayDescription = showFullDescription ? description : (shouldTruncate ? description.substring(0, maxLength) + '...' : description);
 
   return (
     <article className="product-card">
@@ -29,6 +35,22 @@ export default function ProductCard({ product }) {
           <span className="currency">KES</span>
           {(product.price || 0).toLocaleString()}
         </p>
+        
+        {/* Product description with read more functionality */}
+        {description && (
+          <div className="product-description">
+            <p>{displayDescription}</p>
+            {shouldTruncate && (
+              <button
+                type="button"
+                className="read-more-btn"
+                onClick={() => setShowFullDescription(!showFullDescription)}
+              >
+                {showFullDescription ? 'Read Less' : 'Read More'}
+              </button>
+            )}
+          </div>
+        )}
         
         {/* 🔹 Safe Check 2: Only show the sizes container if the product actually has sizes */}
         {productSizes.length > 0 && (
