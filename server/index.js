@@ -26,6 +26,13 @@ const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS
   ? process.env.CORS_ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
   : ['http://localhost:5173'];
 
+// Add common Render URLs to prevent CORS issues
+if (isProduction) {
+  allowedOrigins.push('https://domasventure.onrender.com');
+  allowedOrigins.push('https://domasventures.onrender.com');
+  allowedOrigins.push('https://domas-ventures.onrender.com');
+}
+
 // Log environment configuration for debugging
 console.log('Backend config:');
 console.log('  NODE_ENV=', process.env.NODE_ENV);
@@ -278,10 +285,19 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(
   cors({
     origin(origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
+      
+      // Allow all Render URLs in production
+      if (isProduction && origin.includes('.onrender.com')) {
+        return callback(null, true);
+      }
+      
+      // Check against allowed origins
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
+      
       return callback(new Error(`CORS origin denied: ${origin}`), false);
     },
     credentials: true,
