@@ -10,19 +10,11 @@ services:
       - key: NODE_ENV
         value: production
       - key: SESSION_SECRET
-        value: replace-with-a-random-secret
+        value: domas-ventures-production-secret-2024
       - key: ADMIN_PASSWORD
-        value: replace-with-a-strong-password
+        value: Domas@Admin2024!Secure
       - key: MONGODB_URI
-        value: replace-with-your-mongodb-atlas-connection-string
-      - key: EMAIL_HOST
-        value: smtp.gmail.com
-      - key: EMAIL_PORT
-        value: "587"
-      - key: EMAIL_USER
-        value: your-email@gmail.com
-      - key: EMAIL_PASS
-        value: your-app-password
+        value: mongodb+srv://paulmacharianderi_db_user:wId7gxWMdpNXxEkj@cluster0.dopxnbd.mongodb.net/?appName=Cluster0
       - key: CORS_ALLOWED_ORIGINS
         value: https://domasventures.onrender.com
       - key: COOKIE_SAME_SITE

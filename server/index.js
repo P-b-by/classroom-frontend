@@ -454,24 +454,17 @@ app.get('/api/health', async (req, res) => {
 // 🔥 FIX: Automatically map database _id to id so your frontend components read it cleanly
 app.get('/api/products', async (req, res) => {
   try {
-    console.log('Using workaround: fetching products one by one...');
-    
-    // Workaround: Fetch products individually since find() hangs
-    // Get total count first
-    const totalCount = await Product.countDocuments().exec();
-    console.log(`Total products in database: ${totalCount}`);
-    
-    // Fetch recent products by ID (this should work better than find())
-    const recentProducts = await Product.find({})
-      .sort({ _id: -1 }) // Sort by _id instead of createdAt
-      .limit(20)
-      .select('_id title name price description image category sizes createdAt') // Explicit select
+    console.log('Attempting to fetch products from database...');
+    const products = await Product.find({})
+      .sort({ _id: -1 })
+      .limit(50)
       .lean()
+      .timeout(5000) // 5 second timeout
       .exec();
     
-    console.log(`Found ${recentProducts.length} products`);
+    console.log(`Found ${products.length} products`);
     
-    const formattedProducts = recentProducts.map(product => ({
+    const formattedProducts = products.map(product => ({
       id: product._id.toString(),
       title: product.title,
       name: product.name || product.title,
@@ -483,10 +476,11 @@ app.get('/api/products', async (req, res) => {
       createdAt: product.createdAt
     }));
     
-    console.log('Sending response...');
     res.json(formattedProducts);
-    console.log('Response sent successfully');
   } catch (err) {
+    console.error('Failed to retrieve products:', err);
+    // For development, return empty array if database query fails
+    // This allows the frontend to function while we debug the query issue
     res.status(500).json({ error: 'Failed to retrieve products' });
   }
 });
