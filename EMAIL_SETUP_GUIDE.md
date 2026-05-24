@@ -14,7 +14,7 @@ This guide provides comprehensive instructions for configuring email notificatio
 1. Still in Google Account → Security → **2-Step Verification**
 2. Scroll down and click **App passwords**
 3. Click **Select app** → choose **Other (Custom name)**
-4. Enter a descriptive name: `Domas Ventures Orders`
+4. Enter a descriptive name: `Domas Ventures Orders `
 5. Click **Generate**
 6. Copy the 16-character password (this is your `EMAIL_PASS`)
 7. **Important**: Store this password securely, you won't see it again
@@ -23,10 +23,7 @@ This guide provides comprehensive instructions for configuring email notificatio
 Update your `.env` file:
 
 ```bash
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=your-actual-email@gmail.com
-EMAIL_PASS=your-16-char-app-password
+n
 ```
 
 ### Step 4: Restart Your Server
@@ -48,7 +45,6 @@ For production deployment, use a dedicated email service provider for better del
 - Reputation management
 
 #### Setup Steps:
-1. **Create Account**: [SendGrid](https://sendgrid.com)
 2. **API Key Setup**:
    - Go to **Settings** → **API Keys**
    - Click **Create API Key**
