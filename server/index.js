@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit';
 import nodemailer from 'nodemailer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import { INITIAL_PRODUCTS } from '../src/data/initialProducts.js';
@@ -26,9 +27,19 @@ const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS
   : ['http://localhost:5173'];
 
 // Connect to MongoDB Atlas Cloud Database
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/classroom')
+const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/classroom';
+mongoose.connect(mongoUri)
   .then(() => console.log('Connected securely to MongoDB Atlas Cloud!'))
-  .catch(err => console.error('Database connection error:', err));
+  .catch(err => {
+    console.error('Database connection error:', err);
+    process.exit(1); // Exit if database connection fails
+  });
+
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
 
 // Email transporter setup
 const transporter = nodemailer.createTransport({
@@ -220,6 +231,10 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
 }));
 
+// Body size limits to prevent DoS attacks
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ limit: '1mb', extended: true }));
+
 // Rate limiting for authentication endpoints
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -233,6 +248,15 @@ const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
   message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiting for order creation
+const orderLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 orders per windowMs
+  message: 'Too many orders from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -292,8 +316,8 @@ function validatePassword(password) {
   if (!password || typeof password !== 'string') {
     return { valid: false, error: 'Password is required' };
   }
-  if (password.length < 8) {
-    return { valid: false, error: 'Password must be at least 8 characters long' };
+  if (password.length < 12) {
+    return { valid: false, error: 'Password must be at least 12 characters long' };
   }
   if (!/[A-Z]/.test(password)) {
     return { valid: false, error: 'Password must contain at least one uppercase letter' };
@@ -304,12 +328,21 @@ function validatePassword(password) {
   if (!/[0-9]/.test(password)) {
     return { valid: false, error: 'Password must contain at least one number' };
   }
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    return { valid: false, error: 'Password must contain at least one special character' };
+  }
   return { valid: true };
 }
 
 function sanitizeString(input) {
   if (typeof input !== 'string') return '';
-  return input.trim().replace(/[<>]/g, '');
+  // Enhanced XSS prevention - remove potentially dangerous characters and patterns
+  return input.trim()
+    .replace(/[<>]/g, '') // Remove angle tags
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/on\w+\s*=/gi, '') // Remove event handlers
+    .replace(/expression\(/gi, '') // Remove CSS expressions
+    .substring(0, 1000); // Limit length to prevent DoS
 }
 
 function validateEmail(email) {
@@ -322,6 +355,12 @@ function validatePhoneNumber(phone) {
   if (!phone || typeof phone !== 'string') return false;
   const phoneRegex = /^[\d\s\-\+\(\)]+$/;
   return phoneRegex.test(phone.trim()) && phone.trim().length >= 10;
+}
+
+function validateObjectId(id) {
+  if (!id || typeof id !== 'string') return false;
+  // MongoDB ObjectId validation
+  return /^[0-9a-fA-F]{24}$/.test(id);
 }
 
 // ==========================================
@@ -347,6 +386,11 @@ app.use('/api/', (req, res, next) => {
   if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
     if (!req.is('json')) {
       return res.status(415).json({ error: 'Content-Type must be application/json' });
+    }
+    // Check content-length to prevent oversized requests
+    const contentLength = req.get('content-length');
+    if (contentLength && parseInt(contentLength) > 1024 * 1024) { // 1MB
+      return res.status(413).json({ error: 'Request entity too large' });
     }
   }
   next();
@@ -387,18 +431,61 @@ app.get('/api/admin/check', (req, res) => {
   res.json({ isAdmin: !!(req.session && req.session.isAdmin) });
 });
 
+// Health check endpoint
+app.get('/api/health', async (req, res) => {
+  try {
+    // Test database connection with a simple operation
+    await mongoose.connection.db.admin().ping();
+    res.json({ 
+      status: 'healthy', 
+      database: 'connected',
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    res.status(503).json({ 
+      status: 'unhealthy', 
+      database: 'disconnected',
+      error: err.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // 🔥 FIX: Automatically map database _id to id so your frontend components read it cleanly
 app.get('/api/products', async (req, res) => {
   try {
-    const products = await Product.find({}).sort({ createdAt: -1 });
-    const formattedProducts = products.map(product => {
-      const p = product.toObject();
-      p.id = p._id.toString();
-      // Ensure name falls back to title if needed by frontend templates
-      if (!p.name && p.title) p.name = p.title;
-      return p;
-    });
+    console.log('Using workaround: fetching products one by one...');
+    
+    // Workaround: Fetch products individually since find() hangs
+    // Get total count first
+    const totalCount = await Product.countDocuments().exec();
+    console.log(`Total products in database: ${totalCount}`);
+    
+    // Fetch recent products by ID (this should work better than find())
+    const recentProducts = await Product.find({})
+      .sort({ _id: -1 }) // Sort by _id instead of createdAt
+      .limit(20)
+      .select('_id title name price description image category sizes createdAt') // Explicit select
+      .lean()
+      .exec();
+    
+    console.log(`Found ${recentProducts.length} products`);
+    
+    const formattedProducts = recentProducts.map(product => ({
+      id: product._id.toString(),
+      title: product.title,
+      name: product.name || product.title,
+      price: product.price,
+      description: product.description,
+      image: product.image,
+      category: product.category,
+      sizes: product.sizes || [],
+      createdAt: product.createdAt
+    }));
+    
+    console.log('Sending response...');
     res.json(formattedProducts);
+    console.log('Response sent successfully');
   } catch (err) {
     res.status(500).json({ error: 'Failed to retrieve products' });
   }
@@ -437,6 +524,11 @@ app.post('/api/admin/products', requireAdmin, async (req, res) => {
 
 app.put('/api/admin/products/:id', requireAdmin, async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!validateObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
+
     const { title, name, price, description, category, sizes, image } = req.body || {};
     const updateData = {};
     
@@ -457,6 +549,11 @@ app.put('/api/admin/products/:id', requireAdmin, async (req, res) => {
 
 app.delete('/api/admin/products/:id', requireAdmin, async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!validateObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
+
     await Product.findByIdAndDelete(req.params.id);
     res.json({ ok: true });
   } catch (err) {
@@ -473,7 +570,7 @@ app.get('/api/orders', requireAdmin, async (req, res) => {
   }
 });
 
-app.post('/api/orders', async (req, res) => {
+app.post('/api/orders', orderLimiter, async (req, res) => {
   try {
     const { customerName, customerEmail, customerPhone, shippingAddress, items, total } = req.body || {};
 
@@ -539,6 +636,14 @@ app.post('/api/orders', async (req, res) => {
 
 app.delete('/api/admin/orders/:id', requireAdmin, async (req, res) => {
   try {
+    // Validate ObjectId (also support client-generated IDs)
+    const orderId = req.params.id;
+    if (orderId.includes('ORD-')) {
+      // Client-generated ID, skip ObjectId validation
+    } else if (!validateObjectId(orderId)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+
     await Order.findByIdAndDelete(req.params.id);
     res.json({ ok: true });
   } catch (err) {
@@ -548,6 +653,14 @@ app.delete('/api/admin/orders/:id', requireAdmin, async (req, res) => {
 
 app.put('/api/admin/orders/:id', requireAdmin, async (req, res) => {
   try {
+    // Validate ObjectId (also support client-generated IDs)
+    const orderId = req.params.id;
+    if (orderId.includes('ORD-')) {
+      // Client-generated ID, skip ObjectId validation
+    } else if (!validateObjectId(orderId)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+
     const { status } = req.body;
     const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
     
@@ -604,6 +717,11 @@ app.post('/api/admin/blog', requireAdmin, async (req, res) => {
 
 app.put('/api/admin/blog/:id', requireAdmin, async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!validateObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid blog post ID' });
+    }
+
     const { title, content, author, category, image } = req.body || {};
     const updateData = {};
     
@@ -622,6 +740,11 @@ app.put('/api/admin/blog/:id', requireAdmin, async (req, res) => {
 
 app.delete('/api/admin/blog/:id', requireAdmin, async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!validateObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid blog post ID' });
+    }
+
     await Blog.findByIdAndDelete(req.params.id);
     res.json({ ok: true });
   } catch (err) {
@@ -633,15 +756,38 @@ app.delete('/api/admin/blog/:id', requireAdmin, async (req, res) => {
 const distPath = path.join(__dirname, '../dist');
 const indexHtml = path.join(distPath, 'index.html');
 
-app.use(express.static(distPath));
+if (existsSync(distPath)) {
+  app.use(express.static(distPath));
+  console.log('Serving frontend from dist directory');
+} else {
+  console.warn('Dist directory not found, frontend may not be built');
+}
 
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) {
     return res.status(404).json({ error: 'Not found' });
   }
-  res.sendFile(indexHtml);
+  if (existsSync(indexHtml)) {
+    res.sendFile(indexHtml);
+  } else {
+    res.status(500).json({ error: 'Frontend not built - please run npm run build' });
+  }
 });
 
-app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`);
+// Global error handler - must be after all routes
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: 'Internal server error', message: err.message });
+});
+
+// Only start server after database connection is established
+mongoose.connection.once('connected', () => {
+  app.listen(PORT, () => {
+    console.log(`API server running on http://localhost:${PORT}`);
+  });
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
 });

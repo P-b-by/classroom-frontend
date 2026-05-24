@@ -21,8 +21,11 @@ export function StoreProvider({ children }) {
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) setProducts(data);
+        } else {
+          console.error('Products API error:', res.status, res.statusText);
         }
       } catch (e) {
+        console.error('Products fetch error:', e);
         /* network/server not available - keep local data */
       }
 
@@ -32,9 +35,11 @@ export function StoreProvider({ children }) {
           const j = await r.json();
           setIsAdmin(!!j?.isAdmin);
         } else {
+          console.error('Admin check error:', r.status, r.statusText);
           setIsAdmin(false);
         }
       } catch (e) {
+        console.error('Admin check fetch error:', e);
         // network/server not available - mark as not admin to avoid accidental access
         setIsAdmin(false);
       }
@@ -47,14 +52,24 @@ export function StoreProvider({ children }) {
     async function load() {
       try {
         const p = await fetch(`${API_BASE}/api/products`, { credentials: 'include' });
-        if (p.ok) setProducts(await p.json());
+        if (p.ok) {
+          setProducts(await p.json());
+        } else {
+          console.error('Products load error:', p.status, p.statusText);
+        }
       } catch (e) {
+        console.error('Products load fetch error:', e);
         /* ignore */
       }
       try {
         const b = await fetch(`${API_BASE}/api/blog`, { credentials: 'include' });
-        if (b.ok) setBlogPosts(await b.json());
+        if (b.ok) {
+          setBlogPosts(await b.json());
+        } else {
+          console.error('Blog load error:', b.status, b.statusText);
+        }
       } catch (e) {
+        console.error('Blog load fetch error:', e);
         /* ignore */
       }
     }
@@ -66,8 +81,13 @@ export function StoreProvider({ children }) {
     (async () => {
       try {
         const r = await fetch(`${API_BASE}/api/orders`, { credentials: 'include' });
-        if (r.ok) setOrders(await r.json());
+        if (r.ok) {
+          setOrders(await r.json());
+        } else {
+          console.error('Orders load error:', r.status, r.statusText);
+        }
       } catch (e) {
+        console.error('Orders load fetch error:', e);
         /* ignore */
       }
     })();

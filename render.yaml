@@ -13,6 +13,16 @@ services:
         value: replace-with-a-random-secret
       - key: ADMIN_PASSWORD
         value: replace-with-a-strong-password
+      - key: MONGODB_URI
+        value: replace-with-your-mongodb-atlas-connection-string
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USER
+        value: your-email@gmail.com
+      - key: EMAIL_PASS
+        value: your-app-password
       - key: CORS_ALLOWED_ORIGINS
         value: https://domasventures.onrender.com
       - key: COOKIE_SAME_SITE
