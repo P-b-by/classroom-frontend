@@ -51,7 +51,11 @@ export default function AdminBlog() {
   };
 
   const handleDelete = (id, title) => {
-    if (window.confirm(`Delete "${title}"?`)) deleteBlogPost(id);
+    console.log('handleDelete called with ID:', id, 'and title:', title);
+    if (window.confirm(`Delete "${title}"?`)) {
+      console.log('User confirmed deletion for ID:', id);
+      deleteBlogPost(id);
+    }
   };
 
   return (

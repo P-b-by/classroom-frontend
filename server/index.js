@@ -757,14 +757,18 @@ app.put('/api/admin/blog/:id', requireAdmin, async (req, res) => {
 
 app.delete('/api/admin/blog/:id', requireAdmin, async (req, res) => {
   try {
+    console.log('DELETE request for blog post ID:', req.params.id);
     // Validate ObjectId
     if (!validateObjectId(req.params.id)) {
+      console.log('Invalid blog post ID:', req.params.id);
       return res.status(400).json({ error: 'Invalid blog post ID' });
     }
 
-    await Blog.findByIdAndDelete(req.params.id);
+    const deletedPost = await Blog.findByIdAndDelete(req.params.id);
+    console.log('Deleted blog post:', deletedPost ? deletedPost.title : 'Not found');
     res.json({ ok: true });
   } catch (err) {
+    console.error('Failed to delete blog post:', err);
     res.status(500).json({ error: 'Failed to delete blog post' });
   }
 });

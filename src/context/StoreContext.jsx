@@ -399,16 +399,21 @@ export function StoreProvider({ children }) {
   };
 
   const deleteBlogPost = (id) => {
+    console.log('Deleting blog post with ID:', id);
     if (isAdmin) {
       (async () => {
         try {
           await fetch(`${API_BASE}/api/admin/blog/${id}`, { method: 'DELETE', credentials: 'include' });
         } catch (e) {
-          /* ignore */
+          console.error('Failed to delete blog post:', e);
         }
       })();
     }
-    setBlogPosts((prev) => prev.filter((p) => p.id !== id));
+    setBlogPosts((prev) => {
+      const filtered = prev.filter((p) => p.id !== id);
+      console.log('Filtered blog posts, remaining count:', filtered.length);
+      return filtered;
+    });
   };
 
   const getBlogPostBySlug = (slug) => blogPosts.find((p) => p.slug === slug);
