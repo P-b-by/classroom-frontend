@@ -28,7 +28,7 @@ export default function AdminProducts() {
 
   const openEdit = (product) => {
     setForm({
-      name: product.name,
+      name: product.name || product.title, // Handle both name and title fields
       category: product.category,
       price: String(product.price),
       description: product.description,
@@ -53,6 +53,7 @@ export default function AdminProducts() {
       .filter(Boolean);
 
     const data = {
+      title: form.name, // API expects 'title' field
       name: form.name,
       category: form.category,
       price: form.price,
