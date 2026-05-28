@@ -154,10 +154,10 @@ export default function Home() {
           </header>
           <div className="collections-grid">
             {[
-              { name: "Men's Shoes", img: 'https://images.unsplash.com/photo-1614251180502-f9b245c3bf48?w=500&h=650&fit=crop' },
+              { name: "Men's Shoes", img: 'https://unsplash.com/photos/person-wearing-brown-leather-shoes-vIO0aTKj8lk' },
               { name: 'Sneakers', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=650&fit=crop' },
-              { name: 'Official Shoes', img: 'https://images.unsplash.com/photo-1614252235356-8f857d38b3f0?w=500&h=650&fit=crop' },
-              { name: 'School Shoes', img: 'https://images.unsplash.com/photo-1560769629-975ec094f050?w=500&h=650&fit=crop' },
+              { name: 'Official Shoes', img: 'https://unsplash.com/photos/brown-leather-shoes-on-brown-floor-tiles-wh2udxkVPWA' },
+              { name: 'School Shoes', img: 'https://unsplash.com/photos/young-person-in-school-uniform-and-brown-shoes-sits-bVuzwIbzB7Y' },
             ].map((cat) => (
               <Link
                 key={cat.name}
