@@ -154,7 +154,7 @@ export default function Home() {
           </header>
           <div className="collections-grid">
             {[
-              { name: "Men's Shoes", img: 'https://unsplash.com/photos/person-wearing-brown-leather-shoes-vIO0aTKj8lk' },
+              { name: "Men's Shoes",  img: "./src/photos/mens-shoes.jpg"  },
               { name: 'Sneakers', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=650&fit=crop' },
               { name: 'Official Shoes', img: 'https://unsplash.com/photos/brown-leather-shoes-on-brown-floor-tiles-wh2udxkVPWA' },
               { name: 'School Shoes', img: 'https://unsplash.com/photos/young-person-in-school-uniform-and-brown-shoes-sits-bVuzwIbzB7Y' },
